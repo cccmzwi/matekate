@@ -31,4 +31,8 @@ Diese Datei wird von einem XSLT-Prozessor verwendet, um den Datenauszug aus der
 openstreetmap-Datenbank zu parsen. Der Auszug kommt als XML daher und enthält 
 (nur) Nodes, die das Tag club-mate=yes tragen.
 
-
+machMateKate.sh
+---------------
+Dieses shellscript lädt die Matezugangs-Punkte herunter (via wget) und 
+generiert die Datei matekate.txt (via xsltproc). Das script sollte regelmäßig 
+ausgeführt werden, um matekate.txt aktuell zu halten.
