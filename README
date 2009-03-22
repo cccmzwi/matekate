@@ -1,0 +1,34 @@
+Dies ist das Matekate Projekt des Chaos Computer Club e.V.
+
+Ziel ist es, eine Karte bereitzustellen, auf der die bekannten 
+Mate-Zugangspunkte verzeichnet sind. Die Mate-Zugangspunkte werden in der 
+openstreetmap-Datenbank mit dem Tag club-mate=yes versehen. Im Folgenden werden 
+die einzelnen Komponenten beschrieben.
+
+matekate.txt
+------------
+Diese Datei enthält Informationen zu den Mate-Zugangspunkten. Sie wird 
+automatisch erzeugt und ist deshalb nicht in diesem Verzeichnis enthalten.  
+Unter anderem sind Koordinaten und der Pfad zu einem icon enthalten. Dieses 
+icon wird an den Mate-Zugangspunkten angezeigt.
+
+matekate.html
+-------------
+Diese Datei stellt die Karte zur Verfügung. Sie lädt javascript von 
+openstreetmap.org und openlayers.org nach. Außerdem wird die Datei matekate.txt 
+nachgeladen, die Informationen zu den Mate-Zugangspunkten enthält. Der pfad zu 
+matekate.txt muß während der Installation angepasst werden.
+Die Karte kann in einen <iframe> geladen werden, um sie in der passenden Größe 
+auf eine beliebige Website zu plazieren.
+
+mate_icon_24.png
+----------------
+Dieses icon wird verwendet, um die Mate-Zugangspunkte zu markieren.
+
+osm2text.xsl
+------------
+Diese Datei wird von einem XSLT-Prozessor verwendet, um den Datenauszug aus der 
+openstreetmap-Datenbank zu parsen. Der Auszug kommt als XML daher und enthält 
+(nur) Nodes, die das Tag club-mate=yes tragen.
+
+
