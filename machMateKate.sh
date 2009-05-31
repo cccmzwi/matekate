@@ -1,6 +1,6 @@
 matefile="matekate.txt"
-nodeURL="http://www.informationfreeway.org/api/0.5/node[club-mate=yes]"
-wayURL="http://www.informationfreeway.org/api/0.5/way[club-mate=yes]"
+nodeURL="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
+wayURL="http://www.informationfreeway.org/api/0.6/way[club-mate=yes]"
 
 
 rm -f "$matefile"
