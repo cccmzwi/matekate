@@ -18,3 +18,8 @@ done
 
 xsltproc osm2text.xsl matenodes.osm | sed 's/^\s\s//g' > matekate.txt
 xsltproc osm2text.xsl mateways.osm | sed 's/^\s\s//g' | sed '/^lat\t/ d' >> matekate.txt
+
+# calculate number of shown Mate POIs
+matecount=`cat matekate.txt | egrep '^[[:digit:]]' | wc -l`
+
+echo "<p>Derzeit sind $matecount Mate-Zugangspunkte eingetragen.</p>" > matecount.html
