@@ -48,7 +48,7 @@
 	<xsl:text>&lt;/br&gt;Zeit: </xsl:text><xsl:value-of select="@timestamp"/>
 	-->
 	<xsl:text>&lt;/br&gt; &lt;/br&gt;Zum Schliessen das Symbol nochmal anklicken</xsl:text>
-	<xsl:text>&#x9;http://www.cccmz.de/wp-content/uploads/2009/03/mate_icon_24.png&#x9;24,24&#x9;-12,-12&#xD;</xsl:text>
+	<xsl:text>&#x9;http://www.cccmz.de/matekate/mate_icon_24.png&#x9;24,24&#x9;-12,-12&#xD;</xsl:text>
     </xsl:template>
 
     <xsl:template match="way">
