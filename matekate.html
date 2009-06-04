@@ -47,13 +47,13 @@
 
 				var	layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
 
-				var layerTah = new OpenLayers.Layer.OSM.Osmarender("Tiles@Home");
+				var layerOr = new OpenLayers.Layer.OSM.Osmarender("Osmarender");
 
-				map.addLayers([layerMapnik,layerTah]);
+				map.addLayers([layerMapnik,layerOr]);
 
 				var pois = new OpenLayers.Layer.Text( "Mate-Zugangspunkte",
 						{
-							location:"http://www.cccmz.de/~tanjeff/matekate.txt",
+							location:"http://cccmz.de/matekate/matekate.txt",
 							projection: map.displayProjection
 						});
 				
