@@ -3,24 +3,42 @@
 # We use REXML
 require "rexml/document"
 
-matefile="matekate.txt"
-nodeURL="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
-#wayURL="http://www.informationfreeway.org/api/0.6/way[club-mate=yes]"
+# Some global parameters
+$nodeURL="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
+$nodefile="matenodes.xml"
+$matekate_txt="matekate.txt"
+#$wayURL="http://www.informationfreeway.org/api/0.6/way[club-mate=yes]"
 
-# get nodes, wget prints to stdout and we read that
-matenodes_xml=`wget "#{nodeURL}" -t 3 -O -`
-#matenodes_xml=`cat matenodes.xml`
+# Open the output file, truncate it
+#File.open($matekate_txt, "wb")
+
+
+
+#############################
+# Find nodes
+#############################
+
+# get nodes via wget (max. 3 tries)
+`wget "#{$nodeURL}" -t 3 -O #{$nodefile}`
 if $? != 0
     puts("Error downloading matenodes.")
     exit 1
 end
 
+# Read the XML document
+matenodes_xml = File.new($nodefile)
 doc = REXML::Document.new(matenodes_xml)
+matenodes_xml.close()
 
+# Put header
 print("lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n")
 
+# For each node:
 doc.elements.each("osm/node") do | node |
+
     title,street,housenumber,postcode,city=nil
+    
+    # Collect the data from the node
     node.each do | tag |
         if tag.class == REXML::Element
 	    key=tag.attributes["k"]
@@ -41,15 +59,15 @@ doc.elements.each("osm/node") do | node |
         end
     end
     
-    # Position
+    # Print position
     print(node.attributes["lat"] + "\t")
     print(node.attributes["lon"] + "\t")
 
-    # Title
+    # Print title
     if title != nil
 	print(title + "\t")
     else
-	print("\n")
+	print("Mate-Zugangspunkt\t")
     end
 
     # Put address to description
@@ -59,8 +77,11 @@ doc.elements.each("osm/node") do | node |
     description += "<br/>" if description != ""
     description += postcode + " " if postcode
     description += city if city
-    print(description) if description
-    print("\t")
+    if description != ""
+	print(description + "\t")
+    else
+	print("(no address in database)\t")
+    end
 
     # put icon information
     print("http://www.cccmz.de/matekate/mate_icon_24.png\t24,24\t-12,-12")
@@ -69,12 +90,3 @@ doc.elements.each("osm/node") do | node |
     print("\n")
 end
 
-#if (! wget "$nodeURL" -t 3 -O matenodes.osm.part)
-#then
-#    echo "getting data from server failed (nodes)."
-#    rm -f matenodes.osm.part
-#    exit 1
-#else
-#    mv matenodes.osm.part matenodes.osm
-#fi
-#xsltproc osm2text.xsl matenodes.osm | sed 's/^\s\s//g' > "$matefile.part"
