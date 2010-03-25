@@ -1,5 +1,23 @@
 #!/usr/bin/ruby
 
+# Author: Tanjeff Moos <tanjeff@cccmz.de>
+# Date: 25.03.2010
+# For the Chaos Computer Club Mainz e.V.
+#
+# This script is licensed under the GPL.
+# TODO: Add GPL notice here ;-)
+#
+
+
+# This script downloads data from the OpenStreetMap database and 
+# converts it to a format suitable for the OpenLayers API.
+#
+# Data is downloaded via 'wget', requesting all nodes which are 
+# tagged with 'club-mate=yes'. The resulting file is in XML format.  
+# It is parsed and a text file is constructed which is feeded into an 
+# OpenLayers JavaScript program to serve as an overlay which makes 
+# club-mate locations visible.
+
 # We use REXML
 require "rexml/document"
 
