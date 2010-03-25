@@ -4,13 +4,18 @@
 require "rexml/document"
 
 # Some global parameters
-$nodeURL="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
-$nodefile="matenodes.xml"
+$URL_club_mate="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
+$URL_drink_club_mate="http://www.informationfreeway.org/api/0.6/node[drink:club-mate=yes]"
+$XML_club_mate="club-mate.xml"
+$XML_drink_club_mate="drink_club-mate.xml"
+
 $matekate_txt="matekate.txt"
-#$wayURL="http://www.informationfreeway.org/api/0.6/way[club-mate=yes]"
 
 # Open the output file, truncate it
 #File.open($matekate_txt, "wb")
+
+# Put header
+print("lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n")
 
 
 
@@ -18,59 +23,65 @@ $matekate_txt="matekate.txt"
 # Find nodes
 #############################
 
-# get nodes via wget (max. 3 tries)
-`wget "#{$nodeURL}" -t 3 -O #{$nodefile}`
-if $? != 0
-    puts("Error downloading matenodes.")
-    exit 1
-end
 
-# Read the XML document
-matenodes_xml = File.new($nodefile)
-doc = REXML::Document.new(matenodes_xml)
-matenodes_xml.close()
+# get nodes with "drink:club-mate" tag via wget (max. 3 tries)
+#`wget "#{$URL_drink_club_mate}" -t 3 -O #{$nodefile}`
+#if $? != 0
+#    puts("Error downloading matenodes.")
+#    exit 1
+#end
 
-# Put header
-print("lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n")
+
+########################
+# tag: club-mate=yes
+########################
+
+# get nodes with "club-mate" tag via wget (max. 3 tries)
+#`wget "#{$URL_club_mate}" -t 3 -O #{$nodefile}`
+#if $? != 0
+#    puts("Error downloading matenodes.")
+#    exit 1
+#end
+
+# Parse the XML file
+doc = REXML::Document.new(File.new($XML_club_mate))
 
 # For each node:
 doc.elements.each("osm/node") do | node |
 
-    title,street,housenumber,postcode,city=nil
+    name,street,housenumber,postcode,city = nil
     
-    # Collect the data from the node
-    node.each do | tag |
-        if tag.class == REXML::Element
-	    key=tag.attributes["k"]
-	    value=tag.attributes["v"]
-	    
-	    case key
-	    when "name"
-		title=value
-	    when "addr:street"
-		street=value
-	    when "addr:housenumber"
-		housenumber=value
-	    when "addr:postcode"
-		postcode=value
-	    when "addr:city"
-		city=value
-	    end
-        end
+    # Collect needed data from the tags
+    node.elements.each("tag") do | tag |
+        key=tag.attributes["k"]
+        value=tag.attributes["v"]
+        
+	case key
+	when "name"
+	    name=value
+	when "addr:street"
+	    street=value
+	when "addr:housenumber"
+	    housenumber=value
+	when "addr:postcode"
+	    postcode=value
+	when "addr:city"
+	    city=value
+	end
     end
     
     # Print position
     print(node.attributes["lat"] + "\t")
     print(node.attributes["lon"] + "\t")
 
-    # Print title
-    if title != nil
-	print(title + "\t")
+    # Print title (use name tag if it was found)
+    if name != nil
+	print(name + "\t")
     else
 	print("Mate-Zugangspunkt\t")
     end
 
-    # Put address to description
+    # Build address from tags
     description = ""
     description += street + " " if street
     description += housenumber if housenumber
