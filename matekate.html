@@ -60,6 +60,8 @@
 				map.addLayer(pois);
 
 				map.addControl(new OpenLayers.Control.LayerSwitcher());
+				map.removeControl(map.controls[1]);
+				map.addControl(new OpenLayers.Control.PanZoomBar());
 
 				var lonLat = new OpenLayers.LonLat(8.350,50.053).transform(map.displayProjection, map.projection);
 				map.setCenter (lonLat,5);
