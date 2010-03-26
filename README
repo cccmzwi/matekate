@@ -2,44 +2,45 @@ Dies ist das Matekate Projekt des Chaos Computer Club e.V.
 
 Ziel ist es, eine Karte bereitzustellen, auf der die bekannten 
 Mate-Zugangspunkte verzeichnet sind. Die Mate-Zugangspunkte werden in der 
-openstreetmap-Datenbank mit dem Tag club-mate=yes versehen. Im Folgenden werden 
-die einzelnen Komponenten beschrieben.
+openstreetmap-Datenbank mit dem Tag drink:club-mate=* versehen. Der Tag is im 
+OpenStreetMap-Wiki näher beschrieben. Im Folgenden werden die einzelnen 
+Komponenten beschrieben.
 
-matekate.txt
-------------
-Diese Datei enthält Informationen zu den Mate-Zugangspunkten. Sie wird 
-automatisch erzeugt und ist deshalb nicht in diesem Verzeichnis enthalten.  
-Unter anderem sind Koordinaten und der Pfad zu einem icon enthalten. Dieses 
-icon wird an den Mate-Zugangspunkten angezeigt.
+HINWWEIS: Der alte tag club-mate=yes ist obsolet und sollte nicht mehr 
+verwendet werden. Er wird aber derzeit noch angezeigt, um falsch getaggte Orte 
+zu finden.
+
+club-mate.txt, drink_club-mate.txt
+----------------------------------
+Diese Dateien enthalten Informationen zu den Mate-Zugangspunkten. Sie werden 
+automatisch erzeugt und sind deshalb nicht in diesem Verzeichnis enthalten.  
+Unter anderem sind Koordinaten und der Pfad zu einem icon enthalten. Die icons 
+werden an den Mate-Zugangspunkten angezeigt.
 
 matekate.html
 -------------
 Diese Datei stellt die Karte zur Verfügung. Sie lädt javascript von 
-openstreetmap.org und openlayers.org nach. Außerdem wird die Datei matekate.txt 
-nachgeladen, die Informationen zu den Mate-Zugangspunkten enthält. Der pfad zu 
-matekate.txt muß während der Installation angepasst werden.
-Die Karte kann in einen <iframe> geladen werden, um sie in der passenden Größe 
-auf eine beliebige Website zu plazieren.
+openstreetmap.org und openlayers.org nach. Außerdem werden die Dateien *.txt 
+nachgeladen, die Informationen zu den Mate-Zugangspunkten enthalten. Diese 
+Dateien müssen im selben Verzeichnis liegen wie matekate.html. Die Karte kann 
+in einen <iframe> geladen werden, um sie in der passenden Größe auf eine 
+beliebige Website zu plazieren.
 
-mate_icon_24.png
+icon*.svg, icon*.png
 ----------------
-Dieses icon wird verwendet, um die Mate-Zugangspunkte zu markieren.
+Diese icons werden verwendet, um die Mate-Zugangspunkte zu markieren. Die 
+svg-Dateien werden zur weiteren Bearbeitung beigelegt; die png-Dateien werden 
+auf der Website angezeigt.
 
-osm2text.xsl
-------------
-Diese Datei wird von einem XSLT-Prozessor verwendet, um den Datenauszug aus der 
-openstreetmap-Datenbank zu parsen. Der Auszug kommt als XML daher und enthält 
-(nur) Nodes, die das Tag club-mate=yes tragen.
-
-machMateKate.sh
+machMateKate.rb
 ---------------
-Dieses shellscript lädt die Matezugangs-Punkte herunter (via wget) und 
-generiert die Datei matekate.txt (via xsltproc). Das script sollte regelmäßig 
-ausgeführt werden, um matekate.txt aktuell zu halten.
+Dieses Ruby-Script lädt die Matezugangs-Punkte herunter (via wget) und 
+generiert die Dateien *.txt. Das script sollte regelmäßig ausgeführt werden, um 
+*.txt aktuell zu halten.
 
 index.html
 ----------
-Diese HTML-Datei enthält eine Website, die per <iframe> die matekate.html ein.  
-Dabei wird die Karte auf die aktuelle Browser-Größe angepasst, so dass sie die 
-größtmögliche Fläche einnimmt.
-Während der Installation kann der Inhalt angepasst werden.
+Diese HTML-Datei enthält eine Website, die per <iframe> die matekate.html 
+einbindet.  Dabei wird die Karte auf die aktuelle Browser-Größe angepasst, so 
+dass sie die größtmögliche Fläche einnimmt. Die Datei matekate.html muss dabei 
+im selben Verzeichnis liegen wie index.html.
