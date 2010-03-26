@@ -51,13 +51,14 @@
 
 				map.addLayers([layerMapnik,layerOr]);
 
-				var pois = new OpenLayers.Layer.Text( "Mate-Zugangspunkte",
+				var club_mate = new OpenLayers.Layer.Text( 
+						"Mate-Zugangspunkte",
 						{
-							location:"./matekate.txt",
+							location:"./club-mate.txt",
 							projection: map.displayProjection
 						});
 				
-				map.addLayer(pois);
+				map.addLayer(club_mate);
 
 				map.addControl(new OpenLayers.Control.LayerSwitcher());
 				map.removeControl(map.controls[1]);
