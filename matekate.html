@@ -51,13 +51,20 @@
 
 				map.addLayers([layerMapnik,layerOr]);
 
-				var club_mate = new OpenLayers.Layer.Text( 
-						"Mate-Zugangspunkte",
+				var drink_club_mate = new OpenLayers.Layer.Text(
+						"(drink:club-mate=*)",
+						{
+							location:"./drink_club-mate.txt",
+							projection: map.displayProjection
+						});
+				map.addLayer(drink_club_mate);
+
+				var club_mate = new OpenLayers.Layer.Text(
+						"(club-mate=yes)",
 						{
 							location:"./club-mate.txt",
 							projection: map.displayProjection
 						});
-				
 				map.addLayer(club_mate);
 
 				map.addControl(new OpenLayers.Control.LayerSwitcher());
