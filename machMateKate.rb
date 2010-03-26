@@ -32,6 +32,7 @@ $XML_drink_club_mate="drink_club-mate.xml"
 $TXT_drink_club_mate="drink_club-mate.txt"
 
 
+
 ########################
 # tag: club-mate=yes
 ########################
@@ -94,11 +95,15 @@ doc.elements.each("osm/node") do | node |
     description += "<br/>" if description != ""
     description += postcode + " " if postcode
     description += city if city
-    if description != ""
-	outfile << description + "\t"
-    else
-	outfile << "(no address in database)\t"
-    end
+    description = "(no address in database)" if description == ""
+    
+    # Add Note about obsolete tag
+    description += "<br/>" if description != ""
+    description += "<br/>NOTE:<br/>"
+    description += "The tag club-mate=yes is obsolete. Use drink:club-mate=* instead."
+
+    # Put description to file
+    outfile << description + "\t"
 
     # put icon information
     outfile << "http://www.cccmz.de/matekate/mate_icon_24.png\t24,24\t-12,-12"
@@ -112,4 +117,73 @@ end
 # tag: drink:club-mate=*
 ###########################
 
-#To be done...
+# Download data (max. 3 tries)
+#`wget "#{$URL_drink-club_mate}" -t 3 -O #{$XML_drink_club_mate}`
+#if $? != 0
+#    puts("Error downloading matenodes.")
+#    exit 1
+#end
+
+# Open the text file to be written
+outfile = File.new($TXT_drink_club_mate, File::WRONLY|File::CREAT|File::TRUNC)
+
+# Put header
+outfile << "lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n"
+
+# Parse the XML file
+doc = REXML::Document.new(File.new($XML_drink_club_mate))
+
+# For each node:
+doc.elements.each("osm/node") do | node |
+
+    name,street,housenumber,postcode,city = nil
+    
+    # Collect needed data from the tags
+    node.elements.each("tag") do | tag |
+        key=tag.attributes["k"]
+        value=tag.attributes["v"]
+        
+	case key
+	when "name"
+	    name=value
+	when "addr:street"
+	    street=value
+	when "addr:housenumber"
+	    housenumber=value
+	when "addr:postcode"
+	    postcode=value
+	when "addr:city"
+	    city=value
+	end
+    end
+    
+    # Print position
+    outfile << node.attributes["lat"] + "\t"
+    outfile << node.attributes["lon"] + "\t"
+
+    # Print title (use name tag if it was found)
+    if name != nil
+	outfile << name + "\t"
+    else
+	outfile << "Mate-Zugangspunkt\t"
+    end
+
+    # Build address from tags
+    description = ""
+    description += street + " " if street
+    description += housenumber if housenumber
+    description += "<br/>" if description != ""
+    description += postcode + " " if postcode
+    description += city if city
+    if description != ""
+	outfile << description + "\t"
+    else
+	outfile << "(no address in database)\t"
+    end
+
+    # put icon information
+    outfile << "http://www.cccmz.de/matekate/mate_icon_24.png\t24,24\t-12,-12"
+
+    # Next node
+    outfile << "\n"
+end
