@@ -106,7 +106,7 @@ doc.elements.each("osm/node") do | node |
     outfile << description + "\t"
 
     # put icon information
-    outfile << "http://www.cccmz.de/matekate/mate_icon_24.png\t24,24\t-12,-12"
+    outfile << "./icon_club-mate-obsolet_37x37@-12x-25.png\t37,37\t-12,-25"
 
     # Next node
     outfile << "\n"
@@ -182,7 +182,7 @@ doc.elements.each("osm/node") do | node |
     end
 
     # put icon information
-    outfile << "http://www.cccmz.de/matekate/mate_icon_24.png\t24,24\t-12,-12"
+    outfile << "icon_club-mate_24x24@-12x-12.png\t24,24\t-12,-12"
 
     # Next node
     outfile << "\n"
