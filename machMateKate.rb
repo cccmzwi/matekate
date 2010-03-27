@@ -31,6 +31,8 @@ $URL_drink_club_mate="http://www.informationfreeway.org/api/0.6/node[drink:club-
 $XML_drink_club_mate="drink_club-mate.xml"
 $TXT_drink_club_mate="drink_club-mate.txt"
 
+# Global matenode counter
+$count = 0
 
 
 ########################
@@ -38,11 +40,11 @@ $TXT_drink_club_mate="drink_club-mate.txt"
 ########################
 
 # Download data (max. 3 tries)
-#`wget "#{$URL_club_mate}" -t 3 -O #{$nodefile}`
-#if $? != 0
-#    puts("Error downloading matenodes.")
-#    exit 1
-#end
+`wget "#{$URL_club_mate}" -t 3 -O #{$XML_club_mate}`
+if $? != 0
+    puts("Error downloading matenodes.")
+    exit 1
+end
 
 # Open the text file to be written
 outfile = File.new($TXT_club_mate, File::WRONLY|File::CREAT|File::TRUNC)
@@ -106,10 +108,11 @@ doc.elements.each("osm/node") do | node |
     outfile << description + "\t"
 
     # put icon information
-    outfile << "./icon_club-mate-obsolet_37x37@-12x-25.png\t37,37\t-12,-25"
+    outfile << "./icon_club-mate-obsolet_37x37_-12x-25.png\t37,37\t-12,-25"
 
     # Next node
     outfile << "\n"
+    $count += 1
 end
 
 
@@ -118,11 +121,11 @@ end
 ###########################
 
 # Download data (max. 3 tries)
-#`wget "#{$URL_drink-club_mate}" -t 3 -O #{$XML_drink_club_mate}`
-#if $? != 0
-#    puts("Error downloading matenodes.")
-#    exit 1
-#end
+`wget "#{$URL_drink_club_mate}" -t 3 -O #{$XML_drink_club_mate}`
+if $? != 0
+    puts("Error downloading matenodes.")
+    exit 1
+end
 
 # Open the text file to be written
 outfile = File.new($TXT_drink_club_mate, File::WRONLY|File::CREAT|File::TRUNC)
@@ -182,8 +185,25 @@ doc.elements.each("osm/node") do | node |
     end
 
     # put icon information
-    outfile << "icon_club-mate_24x24@-12x-12.png\t24,24\t-12,-12"
+    outfile << "./icon_club-mate_24x24_-12x-12.png\t24,24\t-12,-12"
 
     # Next node
     outfile << "\n"
+    $count += 1
 end
+
+
+###########################
+# Statistics (hacky)
+###########################
+
+# TODO: find more elegant solution
+
+outfile = File.new("matecount.html", File::WRONLY|File::CREAT|File::TRUNC)
+
+outfile << "<p>"
+outfile << "Derzeit sind #{$count} Mate-Zugangspunkte eingetragen. "
+outfile << "Stand: " + Time.now.asctime()
+outfile << "</p>"
+
+outfile.close()
