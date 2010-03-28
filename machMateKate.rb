@@ -34,8 +34,71 @@ $URL_drink_club_mate="http://www.informationfreeway.org/api/0.6/node[drink:club-
 $XML_drink_club_mate="drink_club-mate.xml"
 $TXT_drink_club_mate="drink_club-mate.txt"
 
+$URL_drink_afri_cola="http://www.informationfreeway.org/api/0.6/node[drink:afri-cola=*]"
+$XML_drink_afri_cola="drink_afri-cola.xml"
+$TXT_drink_afri_cola="drink_afri-cola.txt"
+
 # Global matenode counter
 $count = 0
+
+
+################################
+# Process node helper function
+################################
+
+
+def process_node(node, outfile)
+    name,street,housenumber,postcode,city = nil
+    icon = ""
+
+    # Collect needed data from the tags
+    node.elements.each("tag") do | tag |
+	key=tag.attributes["k"]
+        value=tag.attributes["v"]
+
+        case key
+        when /drink:/
+            yield key, value
+        when "name"
+            name=value
+        when "addr:street"
+            street=value
+        when "addr:housenumber"
+            housenumber=value
+        when "addr:postcode"
+            postcode=value
+        when "addr:city"
+            city=value
+        end
+    end
+
+    # Print position
+    outfile << node.attributes["lat"] + "\t"
+    outfile << node.attributes["lon"] + "\t"
+
+    # Print title (use name tag if it was found)
+    if name != nil
+	outfile << name + "\t"
+    else
+	outfile << "Mate-Zugangspunkt\t"
+    end
+
+    # Build address from tags
+    description = ""
+    description += street + " " if street
+    description += housenumber if housenumber
+    description += "<br/>" if description != ""
+    description += postcode + " " if postcode
+    description += city if city
+    if description != ""
+	outfile << description + "\t"
+    else
+	outfile << "(no address in database)\t"
+    end
+
+    # put icon information
+    outfile << icon
+end
 
 
 ########################
@@ -143,18 +206,14 @@ outfile << "lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n"
 # Parse the XML file
 doc = REXML::Document.new(File.new($XML_drink_club_mate))
 
+
 # For each node:
 doc.elements.each("osm/node") do | node |
 
-    name,street,housenumber,postcode,city = nil
     icon = ""
-    
-    # Collect needed data from the tags
-    node.elements.each("tag") do | tag |
-        key=tag.attributes["k"]
-        value=tag.attributes["v"]
-        
-	case key
+
+    process_node(node, outfile) do | drink_tag, value |
+	case drink_tag
 	when "drink:club-mate"
 	    case value
 	    when "retail"
@@ -165,41 +224,7 @@ doc.elements.each("osm/node") do | node |
 		# e.g. "yes", but also any unkown value
 		icon = "./icon_club-mate_24x24_-12x-12.png\t24,24\t-12,-12"
 	    end
-	when "name"
-	    name=value
-	when "addr:street"
-	    street=value
-	when "addr:housenumber"
-	    housenumber=value
-	when "addr:postcode"
-	    postcode=value
-	when "addr:city"
-	    city=value
 	end
-    end
-    
-    # Print position
-    outfile << node.attributes["lat"] + "\t"
-    outfile << node.attributes["lon"] + "\t"
-
-    # Print title (use name tag if it was found)
-    if name != nil
-	outfile << name + "\t"
-    else
-	outfile << "Mate-Zugangspunkt\t"
-    end
-
-    # Build address from tags
-    description = ""
-    description += street + " " if street
-    description += housenumber if housenumber
-    description += "<br/>" if description != ""
-    description += postcode + " " if postcode
-    description += city if city
-    if description != ""
-	outfile << description + "\t"
-    else
-	outfile << "(no address in database)\t"
     end
 
     # put icon information
@@ -210,6 +235,59 @@ doc.elements.each("osm/node") do | node |
     $count += 1
 end
 
+
+
+
+###########################
+# tag: drink:afri-cola=*
+###########################
+
+# Download data (max. 3 tries)
+if $do_download
+    `wget "#{$URL_drink_afri_cola}" -t 3 -O #{$XML_drink_afri_cola}`
+    if $? != 0
+	puts("Error downloading colanodes.")
+	exit 1
+    end
+end
+
+# Open the text file to be written
+outfile = File.new($TXT_drink_afri_cola, File::WRONLY|File::CREAT|File::TRUNC)
+
+# Put header
+outfile << "lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n"
+
+# Parse the XML file
+doc = REXML::Document.new(File.new($XML_drink_afri_cola))
+
+
+# For each node:
+doc.elements.each("osm/node") do | node |
+
+    icon = ""
+
+    process_node(node, outfile) do | drink_tag, value |
+	case drink_tag
+	when "drink:afri-cola"
+	    case value
+	    when "retail"
+		icon = "./icon_afri-cola-retail_30x40_-12x-28.png\t30,40\t-12,-28"
+	    when "served"
+		icon = "./icon_afri-cola-served_32x40_-12x-28.png\t32,40\t-12,-28"
+	    else
+		# e.g. "yes", but also any unkown value
+		icon = "./icon_afri-cola_24x24_-12x-12.png\t24,24\t-12,-12"
+	    end
+	end
+    end
+
+    # put icon information
+    outfile << icon
+
+    # Next node
+    outfile << "\n"
+    $count += 1
+end
 
 ###########################
 # Statistics (hacky)
