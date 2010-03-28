@@ -23,14 +23,14 @@
 require "rexml/document"
 
 # Whether to download data or use files which were downloaded before
-$do_download = true
+$do_download = false
 
 # URLs and file names
 $URL_club_mate="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
 $XML_club_mate="club-mate.xml"
 $TXT_club_mate="club-mate.txt"
 
-$URL_drink_club_mate="http://www.informationfreeway.org/api/0.6/node[drink:club-mate=yes]"
+$URL_drink_club_mate="http://www.informationfreeway.org/api/0.6/node[drink:club-mate=*]"
 $XML_drink_club_mate="drink_club-mate.xml"
 $TXT_drink_club_mate="drink_club-mate.txt"
 
@@ -147,6 +147,7 @@ doc = REXML::Document.new(File.new($XML_drink_club_mate))
 doc.elements.each("osm/node") do | node |
 
     name,street,housenumber,postcode,city = nil
+    icon = ""
     
     # Collect needed data from the tags
     node.elements.each("tag") do | tag |
@@ -154,6 +155,16 @@ doc.elements.each("osm/node") do | node |
         value=tag.attributes["v"]
         
 	case key
+	when "drink:club-mate"
+	    case value
+	    when "retail"
+		icon = "./icon_club-mate-retail_30x40_-12x-28.png\t30,40\t-12,-28"
+	    when "served"
+		icon = "./icon_club-mate-served_32x40_-12x-28.png\t32,40\t-12,-28"
+	    else
+		# e.g. "yes", but also any unkown value
+		icon = "./icon_club-mate_24x24_-12x-12.png\t24,24\t-12,-12"
+	    end
 	when "name"
 	    name=value
 	when "addr:street"
@@ -192,7 +203,7 @@ doc.elements.each("osm/node") do | node |
     end
 
     # put icon information
-    outfile << "./icon_club-mate_24x24_-12x-12.png\t24,24\t-12,-12"
+    outfile << icon
 
     # Next node
     outfile << "\n"
