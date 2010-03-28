@@ -22,6 +22,9 @@
 # We use REXML
 require "rexml/document"
 
+# Whether to download data or use files which were downloaded before
+$do_download = true
+
 # URLs and file names
 $URL_club_mate="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
 $XML_club_mate="club-mate.xml"
@@ -40,10 +43,12 @@ $count = 0
 ########################
 
 # Download data (max. 3 tries)
-`wget "#{$URL_club_mate}" -t 3 -O #{$XML_club_mate}`
-if $? != 0
-    puts("Error downloading matenodes.")
-    exit 1
+if $do_download
+    `wget "#{$URL_club_mate}" -t 3 -O #{$XML_club_mate}`
+    if $? != 0
+	puts("Error downloading matenodes.")
+	exit 1
+    end
 end
 
 # Open the text file to be written
@@ -121,10 +126,12 @@ end
 ###########################
 
 # Download data (max. 3 tries)
-`wget "#{$URL_drink_club_mate}" -t 3 -O #{$XML_drink_club_mate}`
-if $? != 0
-    puts("Error downloading matenodes.")
-    exit 1
+if $do_download
+    `wget "#{$URL_drink_club_mate}" -t 3 -O #{$XML_drink_club_mate}`
+    if $? != 0
+	puts("Error downloading matenodes.")
+	exit 1
+    end
 end
 
 # Open the text file to be written
