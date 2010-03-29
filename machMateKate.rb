@@ -92,6 +92,8 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     doc = REXML::Document.new(File.new(infile))
     file = File.new(outfile, File::WRONLY|File::CREAT|File::TRUNC)
 
+    count = 0;
+
     # Put header
     file << "lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n"
     
@@ -152,8 +154,12 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     	file << icon
 
 	file << "\n"
+
+	count += 1
     end
     file.close()
+
+    return count
 end
 
 
@@ -173,7 +179,7 @@ icons["default"] = "./icon_club-mate-obsolet_37x37_-12x-25.png\t37,37\t-12,-25"
 description_extra = "<br/>HINWEIS:<br/>"
 description_extra += "Der Tag club-mate=yes ist obsolet. Bitte benutze statt dessen drink:club-mate=*."
 
-parse($XML_club_mate, $TXT_club_mate, "club-mate", description_extra, icons)
+$count_club_mate += parse($XML_club_mate, $TXT_club_mate, "club-mate", description_extra, icons)
 
 
 
@@ -188,7 +194,7 @@ icons = Hash.new()
 icons["retail"] = "./icon_club-mate-retail_30x40_-12x-28.png\t30,40\t-12,-28"
 icons["served"] = "./icon_club-mate-served_32x40_-12x-28.png\t32,40\t-12,-28"
 icons["default"] = "./icon_club-mate_24x24_-12x-12.png\t24,24\t-12,-12"
-parse($XML_drink_club_mate, $TXT_drink_club_mate, "drink:club-mate", "", icons)
+$count_drink_club_mate += parse($XML_drink_club_mate, $TXT_drink_club_mate, "drink:club-mate", "", icons)
 
 
 
@@ -204,7 +210,7 @@ icons = Hash.new()
 icons["retail"] = "./icon_afri-cola-retail_30x40_-12x-28.png\t30,40\t-12,-28"
 icons["served"] = "./icon_afri-cola-served_32x40_-12x-28.png\t32,40\t-12,-28"
 icons["default"] = "./icon_afri-cola_24x24_-12x-12.png\t24,24\t-12,-12"
-parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "drink:afri-cola", "", icons)
+$count_drink_afri_cola += parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "drink:afri-cola", "", icons)
 
 
 ###########################
@@ -216,7 +222,8 @@ parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "drink:afri-cola", "", icons)
 outfile = File.new("matecount.html", File::WRONLY|File::CREAT|File::TRUNC)
 
 outfile << "<p>"
-outfile << "Derzeit sind #{$count} Mate-Zugangspunkte eingetragen. "
+outfile << "Derzeit sind #{$count_drink_club_mate+$count_club_mate} Mate-Zugangspunkte "
+outfile << "und #{$count_drink_afri_cola} Afri Cola-Zugangspunkte eingetragen. "
 outfile << "Stand: " + Time.now.asctime()
 outfile << "</p>"
 
