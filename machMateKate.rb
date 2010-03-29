@@ -1,12 +1,24 @@
 #!/usr/bin/ruby
 
-# Author: Tanjeff Moos <tanjeff@cccmz.de>
-# Date: 25.03.2010
-# For the Chaos Computer Club Mainz e.V.
 #
-# This script is licensed under the GPL.
-# TODO: Add GPL notice here ;-)
+# Copyright 2010
+# Tanjeff Moos <tanjeff@cccmz.de>
+# (Chaos Computer Club Mainz e.V.)
 #
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 
 
 # This script downloads data from the OpenStreetMap database and 
