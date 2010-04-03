@@ -144,7 +144,7 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     	description += "<br/>" if description != ""
     	description += postcode + " " if postcode
     	description += city if city
-	description = "(Keine Adresse angegeben)" if description != ""
+	description = "(Keine Adresse angegeben)" if description == ""
     	if description_extra != ""
 	    description += "<br/>" + description_extra
 	end
