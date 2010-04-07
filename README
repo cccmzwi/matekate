@@ -1,3 +1,23 @@
+==========================================================
+Copyright 2010
+Tanjeff Moos <tanjeff@cccmz.de>
+(Chaos Computer Club Mainz e.V.)
+
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+==========================================================
+
 Dies ist das Matekate Projekt des Chaos Computer Club e.V.
 
 Ziel ist es, eine Karte bereitzustellen, auf der die bekannten 
@@ -10,8 +30,13 @@ HINWWEIS: Der alte tag club-mate=yes ist obsolet und sollte nicht mehr
 verwendet werden. Er wird aber derzeit noch angezeigt, um falsch getaggte Orte 
 zu finden.
 
-club-mate.txt, drink_club-mate.txt
-----------------------------------
+HINWEIS: Die Karte listet auch andere Getränke (derzeit Afri-Cola, es werden 
+aber noch welche dazukommen). Dieses README spricht von Mate-Zugangspunkten, 
+meint damit aber auch die Zugangspunkte anderer Getränke.
+
+
+*.txt
+-----
 Diese Dateien enthalten Informationen zu den Mate-Zugangspunkten. Sie werden 
 automatisch erzeugt und sind deshalb nicht in diesem Verzeichnis enthalten.  
 Unter anderem sind Koordinaten und der Pfad zu einem icon enthalten. Die icons 
@@ -21,21 +46,21 @@ matekate.html
 -------------
 Diese Datei stellt die Karte zur Verfügung. Sie lädt javascript von 
 openstreetmap.org und openlayers.org nach. Außerdem werden die Dateien *.txt 
-nachgeladen, die Informationen zu den Mate-Zugangspunkten enthalten. Diese 
+nachgeladen, die Informationen zu den Mate-Zugangspunkten enthalten.  Diese 
 Dateien müssen im selben Verzeichnis liegen wie matekate.html. Die Karte kann 
 in einen <iframe> geladen werden, um sie in der passenden Größe auf eine 
 beliebige Website zu plazieren.
 
 icon*.svg, icon*.png
 ----------------
-Diese icons werden verwendet, um die Mate-Zugangspunkte zu markieren. Die 
-svg-Dateien werden zur weiteren Bearbeitung beigelegt; die png-Dateien werden 
-auf der Website angezeigt.
+Diese icons werden verwendet, um die Mate-Zugangspunkte zu markieren.  Die 
+svg-Dateien sind zur weiteren Bearbeitung beigelegt; die png-Dateien werden für 
+die Website benötigt.
 
 machMateKate.rb
 ---------------
-Dieses Ruby-Script lädt die Matezugangs-Punkte herunter (via wget) und 
-generiert die Dateien *.txt. Das script sollte regelmäßig ausgeführt werden, um 
+Dieses Ruby-Script lädt die Mate-Zugangspunkte herunter (via wget) und 
+generiert die Dateien *.txt. Das script muss regelmäßig ausgeführt werden, um 
 *.txt aktuell zu halten.
 
 index.html
@@ -44,3 +69,14 @@ Diese HTML-Datei enthält eine Website, die per <iframe> die matekate.html
 einbindet.  Dabei wird die Karte auf die aktuelle Browser-Größe angepasst, so 
 dass sie die größtmögliche Fläche einnimmt. Die Datei matekate.html muss dabei 
 im selben Verzeichnis liegen wie index.html.
+
+matecount.html
+--------------
+Diese Datei wird von machMateKate.rb generiert und enthält HTML-code, der die 
+Anzahl der getaggted Nodes sowie den Zeitpunkt der letzten Aktualisierung 
+enthält.
+
+COPYING
+-------
+Diese Datei enthält die GPLv3 Lizenz. Die Nutzung dieser Software unterliegt 
+dieser Lizenz.
