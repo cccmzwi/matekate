@@ -87,27 +87,48 @@ def download(url, filename)
 end
 
 
-
+# Parse an XML file and generate an TXT file suitable for the OpenLayers 
+# javascript program.
+#
+# Params:
+#     infile: the filename of the XML file. This file must not include nodes
+#             which are not relevant! For each <node> in the file an entry is 
+#             added to the outfile!
+#     outfile: the filename of the TXT output file
+#     drink_tag: which tag we search for. If this tag is found in a node, we
+#                determine which icon to use.
+#     description_extra: is added to the description field (can be "")
+#     icons: an hash containing icon filenames as values. The value of the
+#            drink_tag is used as key into the hash. If the key is not found, 
+#            the key "default" is used, therefore always provide an icon for 
+#            "default"! The value must be 
+#            "path_to_icon.png\tWIDTHxHEIGHT\tOFFSETXxOFFSETY".
+#
+# Return Value: number of entries written to outfile
 def parse(infile, outfile, drink_tag, description_extra, icons)
-    doc = REXML::Document.new(File.new(infile))
-    file = File.new(outfile, File::WRONLY|File::CREAT|File::TRUNC)
-
+    # We count the found nodes
     count = 0;
 
-    # Put header
-    file << "lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n"
+    # Scan XML file
+    doc = REXML::Document.new(File.new(infile))
     
+    # Open output file and put header
+    file = File.new(outfile, File::WRONLY|File::CREAT|File::TRUNC)
+    file << "lat\tlon\ttitle\tdescription\ticon\ticonSize\ticonOffset\n"
+
+    # We inspect each <node>
     doc.elements.each("osm/node") do | node |
+	# Collect needed data from the tags
 	name,street,housenumber,postcode,city = nil
 	icon = ""
 
-	# Collect needed data from the tags
     	node.elements.each("tag") do | tag |
     	    key=tag.attributes["k"]
     	    value=tag.attributes["v"]
 
     	    case key
     	    when drink_tag
+		# This is the relevant tag; we determine which icon to use
 		if icons.has_key?(value)
 		    icon=icons[value]
 		else
@@ -137,7 +158,7 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     	    file << "Mate-Zugangspunkt\t"
     	end
 
-    	# Build address from tags
+	# Put address into description field
     	description = ""
     	description += street + " " if street
     	description += housenumber if housenumber
@@ -145,20 +166,27 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     	description += postcode + " " if postcode
     	description += city if city
 	description = "(Keine Adresse angegeben)" if description == ""
+	# Add description_extra to description field
     	if description_extra != ""
 	    description += "<br/>" + description_extra
 	end
+	# Write description field to outfile
     	file << description + "\t"
 
-    	# put icon information
+	# write icon information to outfile
     	file << icon
 
-	file << "\n"
-
+	# Count the entry
 	count += 1
+	
+	# Put newline for  next entry
+	file << "\n"
     end
+
+    # Tidy up
     file.close()
 
+    # Return number of found nodes.
     return count
 end
 
