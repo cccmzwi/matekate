@@ -73,8 +73,7 @@ $count_drink_afri_cola = 0;
 # Download data (max. 3 tries)
 #
 # Give an URL and under which name the data shall be stored.
-# The result is the file 'filename'
-#
+# The result is the file 'filename'#
 # The function exits on error!
 def download(url, filename)
     if $do_download
@@ -256,3 +255,32 @@ outfile << "Stand: " + Time.now.asctime()
 outfile << "</p>"
 
 outfile.close()
+
+
+###########################
+# Statistics (hacky)
+###########################
+
+infile = File.new("matekate.html.in")
+outfile = File.new("matekate.html", "w")
+
+infile.each_line do |line|
+    string = line
+    begin
+	string = line.sub!(/##(.*?)##/) do | match |
+	    result = ""
+	    case $1
+	    when "erster"
+		puts "result = 1"
+		result = "1"
+	    when "zweiter"
+		puts "result = 2"
+		result = "2"
+	    end
+	    result
+	end
+    end while(string)
+    puts "new line: " + line.to_s
+    outfile << line
+end
+
