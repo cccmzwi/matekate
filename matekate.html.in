@@ -1,118 +1,136 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-    
-    <!--
-    
-    Copyright 2009, 2010
-    Jörg Feuerhake
-    Tanjeff Moos <tanjeff@cccmz.de>
-    (Chaos Computer Club Mainz e.V.)
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+  <!--
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  Copyright 2009, 2010
+  Jörg Feuerhake
+  Tanjeff Moos <tanjeff@cccmz.de>
+  (Chaos Computer Club Mainz e.V.)
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    -->
-    
-    <head>
-		<style type="text/css">
-			#map {
-				width: 100%;
-				height: 100%;
-				border: 0px;
-				padding: 0px;
-				position: 
-				absolute;
-			}
-			body {
-				border: 0px;
-				margin: 0px;
-				padding: 0px;
-				height: 100%;
-			}
-			h2 {
-				text-align: center;
-				font-size: 12px;
-				font-weight: 700;
-			}
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-			p {
-				text-align: left;
-				font-size: 10px;
-				font-weight: 400;
-			}
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-		</style>
-		<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-		<script	src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
-		<script type="text/javascript">
-			<!--
-			var map;
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-			function init() {
-				map = new OpenLayers.Map('map',
-						{
-							maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
-							numZoomLevels: 19,
-							maxResolution: 156543.0399,
-							units:'m',
-							projection: new OpenLayers.Projection("EPSG:900913"),
-							displayProjection: new OpenLayers.Projection("EPSG:4326")
-						});
+  -->
 
-				var	layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+  <!--
+  This file serves as infile for the machMateKate.rb script, which replaces 
+  certain patterns and places the result in matekate.html.
+  -->
 
-				var layerOr = new OpenLayers.Layer.OSM.Osmarender("Osmarender");
+  <head>
+    <style type="text/css">
+      #map {
+	width: 100%;
+	height: 100%;
+	border: 0px;
+	padding: 0px;
+	position: 
+	absolute;
+      }
+      body {
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+	height: 100%;
+      }
+      h2 {
+	text-align: center;
+	font-size: 12px;
+	font-weight: 700;
+      }
 
-				map.addLayers([layerMapnik,layerOr]);
+      p {
+	text-align: left;
+	font-size: 10px;
+	font-weight: 400;
+      }
+    </style>
 
-				var drink_club_mate = new OpenLayers.Layer.Text(
-		    "drink:club-mate=* (##count_drink_club_mate##)",
-						{
-							location:"./drink_club-mate.txt",
-							projection: map.displayProjection
-						});
-				map.addLayer(drink_club_mate);
-				
-				var drink_afri_cola = new 
-				    OpenLayers.Layer.Text(
-			    "(drink:afri-cola=*) (##count_drink_afri_cola##)",
-						{
-							location:"./drink_afri-cola.txt",
-							projection: map.displayProjection,
-							visibility: false
-						});
-				map.addLayer(drink_afri_cola);
+    <script src="http://www.openlayers.org/api/OpenLayers.js" />
 
-				var club_mate = new OpenLayers.Layer.Text(
-					"club-mate=yes (##count_club_mate##)",
-						{
-							location:"./club-mate.txt",
-							projection: map.displayProjection
-						});
-				map.addLayer(club_mate);
+    <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js" />
+      
+    <script type="text/javascript">
+      <!--
+      var map;
 
-				map.addControl(new OpenLayers.Control.LayerSwitcher());
-				map.removeControl(map.controls[1]);
-				map.addControl(new OpenLayers.Control.PanZoomBar());
+      function init() {
+	// Create new map
+	map = new OpenLayers.Map('map',
+	  {
+	    maxExtent: new, 
+	    OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+	    numZoomLevels: 19,
+	    maxResolution: 156543.0399,
+	    units:'m',
+	    projection: new OpenLayers.Projection("EPSG:900913"),
+	    displayProjection: new OpenLayers.Projection("EPSG:4326")
+	  });
 
-				var lonLat = new OpenLayers.LonLat(8.350,50.053).transform(map.displayProjection, map.projection);
-				map.setCenter (lonLat,5);
-			}
-		// -->
-		</script>
-	</head>
+	// Add base layers to map
+	var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+	var layerOr = new OpenLayers.Layer.OSM.Osmarender("Osmarender");
+	map.addLayers([layerMapnik,layerOr]);
 
-	<body onload="init()">
-		<div id="map" style="margin:12px;"></div>
-	</body>
+	// Add overlay for drink:club-mate=* tagged locations
+	var drink_club_mate = new OpenLayers.Layer.Text(
+	      "drink:club-mate=* (##count_drink_club_mate##)",
+	      {
+		location:"./drink_club-mate.txt",
+		projection: map.displayProjection
+	      });
+	map.addLayer(drink_club_mate);
+
+	// Add overlay for drink:afri-cola=* tagged locations
+	var drink_afri_cola = new OpenLayers.Layer.Text(
+	  "(drink:afri-cola=*) (##count_drink_afri_cola##)",
+	  {
+	    location:"./drink_afri-cola.txt",
+	    projection: map.displayProjection,
+	    // invisible by default, can be enabled by user:
+	    visibility: false
+	  });
+	map.addLayer(drink_afri_cola);
+
+	// Add overlay for club-mate=yes tagged locations
+	var club_mate = new OpenLayers.Layer.Text(
+	  "club-mate=yes (##count_club_mate##)",
+	  {
+	    location:"./club-mate.txt",
+	    projection: map.displayProjection
+	  });
+	  map.addLayer(club_mate);
+
+	  // Configure controls
+	  map.addControl(new OpenLayers.Control.LayerSwitcher());
+	  map.removeControl(map.controls[1]);
+	  map.addControl(new OpenLayers.Control.PanZoomBar());
+
+	  // set default position and zoom level
+	  var lonLat = new OpenLayers.LonLat(8.350,50.053).transform(
+	      map.displayProjection, map.projection
+	      );
+	  map.setCenter (lonLat,5);
+
+      }	    // end of function init()
+
+      // -->
+    </script>
+  
+  </head>
+
+  <body onload="init()">
+    <div id="map" style="margin:12px;"></div>
+  </body>
 </html>
 
