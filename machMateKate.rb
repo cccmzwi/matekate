@@ -65,6 +65,10 @@ $XML_drink_afri_cola="drink_afri-cola.xml"
 $TXT_drink_afri_cola="drink_afri-cola.txt"
 $count_drink_afri_cola = 0;
 
+# HTML file generation
+$html_infile = "matekate.html.in"
+$html_outfile = "matekate.html"
+
 
 ################################
 # Helper functions
@@ -245,14 +249,19 @@ $count_drink_afri_cola += parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "dri
 ###########################
 #
 # We read a html file and substitute the following patterns:
+#
 # ##count_drink_afri_cola## => number of afri-cola nodes
+#
 # ##count_drink_club_mate## => number of club nodes (new tag)
+#
 # ##count_club_mate## => number of club nodes (old tag)
-# TBD: describe all substitutions
 
-infile = File.new("matekate.html.in")
-outfile = File.new("matekate.html", "w")
+# Open files
+infile = File.new($html_infile)
+outfile = File.new($html_outfile, File::WRONLY|File::CREAT|File::TRUNC)
 
+# Read one line after another, perform pattern substitution for the current 
+# line and write the line to outfile
 infile.each_line do |line|
     line.gsub!(/##(.*?)##/) do | match |
 	result = $&
@@ -265,8 +274,13 @@ infile.each_line do |line|
 	when "count_drink_afri_cola"
 	    result = $count_drink_afri_cola
 	end
+
 	result.to_s
     end
     outfile << line
 end
+
+# close files
+infile.close()
+outfile.close()
 
