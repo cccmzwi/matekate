@@ -241,46 +241,32 @@ $count_drink_afri_cola += parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "dri
 
 
 ###########################
-# Statistics (hacky)
+# Generate HTML code
 ###########################
-
-# TODO: find more elegant solution
-
-outfile = File.new("matecount.html", File::WRONLY|File::CREAT|File::TRUNC)
-
-outfile << "<p>"
-outfile << "Derzeit sind #{$count_drink_club_mate+$count_club_mate} Mate-Zugangspunkte "
-outfile << "und #{$count_drink_afri_cola} Afri Cola-Zugangspunkte eingetragen. "
-outfile << "Stand: " + Time.now.asctime()
-outfile << "</p>"
-
-outfile.close()
-
-
-###########################
-# Statistics (hacky)
-###########################
+#
+# We read a html file and substitute the following patterns:
+# ##count_drink_afri_cola## => number of afri-cola nodes
+# ##count_drink_club_mate## => number of club nodes (new tag)
+# ##count_club_mate## => number of club nodes (old tag)
+# TBD: describe all substitutions
 
 infile = File.new("matekate.html.in")
 outfile = File.new("matekate.html", "w")
 
 infile.each_line do |line|
-    string = line
-    begin
-	string = line.sub!(/##(.*?)##/) do | match |
-	    result = ""
-	    case $1
-	    when "erster"
-		puts "result = 1"
-		result = "1"
-	    when "zweiter"
-		puts "result = 2"
-		result = "2"
-	    end
-	    result
+    line.gsub!(/##(.*?)##/) do | match |
+	result = $&
+
+	case $1
+	when "count_club_mate"
+	    result = $count_club_mate
+	when "count_drink_club_mate"
+	    result = $count_drink_club_mate
+	when "count_drink_afri_cola"
+	    result = $count_drink_afri_cola
 	end
-    end while(string)
-    puts "new line: " + line.to_s
+	result.to_s
+    end
     outfile << line
 end
 

@@ -7,10 +7,6 @@
     Tanjeff Moos <tanjeff@cccmz.de>
     (Chaos Computer Club Mainz e.V.)
 
-    ##erster## ##zweiter##
-
-    ##erster## ##
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -79,7 +75,7 @@
 				map.addLayers([layerMapnik,layerOr]);
 
 				var drink_club_mate = new OpenLayers.Layer.Text(
-				    "drink:club-mate=* (##club-mate-count##)",
+		    "drink:club-mate=* (##count_drink_club_mate##)",
 						{
 							location:"./drink_club-mate.txt",
 							projection: map.displayProjection
@@ -88,7 +84,7 @@
 				
 				var drink_afri_cola = new 
 				    OpenLayers.Layer.Text(
-						"(drink:afri-cola=*)",
+			    "(drink:afri-cola=*) (##count_drink_afri_cola##)",
 						{
 							location:"./drink_afri-cola.txt",
 							projection: map.displayProjection,
@@ -97,7 +93,7 @@
 				map.addLayer(drink_afri_cola);
 
 				var club_mate = new OpenLayers.Layer.Text(
-						"(club-mate=yes)",
+					"club-mate=yes (##count_club_mate##)",
 						{
 							location:"./club-mate.txt",
 							projection: map.displayProjection
