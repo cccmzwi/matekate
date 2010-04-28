@@ -56,9 +56,11 @@
       }
     </style>
 
-    <script src="http://www.openlayers.org/api/OpenLayers.js" />
+    <script src="http://www.openlayers.org/api/OpenLayers.js">
+    </script>
 
-    <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js" />
+    <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js">
+    </script>
       
     <script type="text/javascript">
       <!--
@@ -68,8 +70,8 @@
 	// Create new map
 	map = new OpenLayers.Map('map',
 	  {
-	    maxExtent: new, 
-	    OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+	    maxExtent: new
+	      OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	    numZoomLevels: 19,
 	    maxResolution: 156543.0399,
 	    units:'m',
@@ -93,7 +95,7 @@
 
 	// Add overlay for drink:afri-cola=* tagged locations
 	var drink_afri_cola = new OpenLayers.Layer.Text(
-	  "(drink:afri-cola=*) (##count_drink_afri_cola##)",
+	  "drink:afri-cola=* (##count_drink_afri_cola##)",
 	  {
 	    location:"./drink_afri-cola.txt",
 	    projection: map.displayProjection,
