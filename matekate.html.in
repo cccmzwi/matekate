@@ -86,7 +86,11 @@
 
 	// Add overlay for drink:club-mate=* tagged locations
 	var drink_club_mate = new OpenLayers.Layer.Text(
-	      "drink:club-mate=* (##count_drink_club_mate##)",
+		"<small>\
+		drink:club-mate=* \
+		(##count_drink_club_mate##) \
+		##date_drink_club_mate##\
+		</small>",
 	      {
 		location:"./drink_club-mate.txt",
 		projection: map.displayProjection
@@ -95,7 +99,11 @@
 
 	// Add overlay for drink:afri-cola=* tagged locations
 	var drink_afri_cola = new OpenLayers.Layer.Text(
-	  "drink:afri-cola=* (##count_drink_afri_cola##)",
+		"<small>\
+		drink:afri-cola=* \
+		(##count_drink_afri_cola##) \
+		##date_drink_afri_cola##\
+		</small>",
 	  {
 	    location:"./drink_afri-cola.txt",
 	    projection: map.displayProjection,
@@ -106,7 +114,11 @@
 
 	// Add overlay for club-mate=yes tagged locations
 	var club_mate = new OpenLayers.Layer.Text(
-	  "club-mate=yes (##count_club_mate##)",
+		"<small>\
+		club-mate=yes \
+		(##count_club_mate##) \
+		##date_club_mate##\
+		</small>",
 	  {
 	    location:"./club-mate.txt",
 	    projection: map.displayProjection

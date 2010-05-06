@@ -54,16 +54,19 @@ $URL_club_mate="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
 $XML_club_mate="club-mate.xml"
 $TXT_club_mate="club-mate.txt"
 $count_club_mate = 0;
+$date_club_mate = "";
 
 $URL_drink_club_mate="http://www.informationfreeway.org/api/0.6/node[drink:club-mate=*]"
 $XML_drink_club_mate="drink_club-mate.xml"
 $TXT_drink_club_mate="drink_club-mate.txt"
 $count_drink_club_mate = 0;
+$date_drink_club_mate = "";
 
 $URL_drink_afri_cola="http://www.informationfreeway.org/api/0.6/node[drink:afri-cola=*]"
 $XML_drink_afri_cola="drink_afri-cola.xml"
 $TXT_drink_afri_cola="drink_afri-cola.txt"
 $count_drink_afri_cola = 0;
+$date_drink_afri_cola = "";
 
 # HTML file generation
 $html_infile = "matekate.html.in"
@@ -107,7 +110,8 @@ end
 #            "default"! The value must be 
 #            "path_to_icon.png\tWIDTHxHEIGHT\tOFFSETXxOFFSETY".
 #
-# Return Value: number of entries written to outfile
+# Return Values: number of entries written to outfile and the date of the data 
+# as found in the parsed infile (attribute xapi:planetDate of <osm> element).
 def parse(infile, outfile, drink_tag, description_extra, icons)
     # We count the found nodes
     count = 0;
@@ -189,9 +193,15 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     # Tidy up
     file.close()
 
+    # Read date
+    date = doc.root.attributes["xapi:planetDate"]
+    date = date.slice(6,2) + "." + date.slice(4,2) + "." + date.slice(0,4)
+
     # Return number of found nodes.
-    return count
+    return count, date
 end
+
+
 
 
 
@@ -210,8 +220,8 @@ icons["default"] = "./icon_club-mate-obsolet_37x37_-12x-25.png\t37,37\t-12,-25"
 description_extra = "<br/>HINWEIS:<br/>"
 description_extra += "Der Tag club-mate=yes ist obsolet. Bitte benutze statt dessen drink:club-mate=*."
 
-$count_club_mate += parse($XML_club_mate, $TXT_club_mate, "club-mate", description_extra, icons)
-
+$count_club_mate, $date_club_mate = 
+    parse($XML_club_mate, $TXT_club_mate, "club-mate", description_extra, icons)
 
 
 ###########################
@@ -225,7 +235,8 @@ icons = Hash.new()
 icons["retail"] = "./icon_club-mate-retail_30x40_-12x-28.png\t30,40\t-12,-28"
 icons["served"] = "./icon_club-mate-served_32x40_-12x-28.png\t32,40\t-12,-28"
 icons["default"] = "./icon_club-mate_24x24_-12x-12.png\t24,24\t-12,-12"
-$count_drink_club_mate += parse($XML_drink_club_mate, $TXT_drink_club_mate, "drink:club-mate", "", icons)
+$count_drink_club_mate, $date_drink_club_mate = 
+    parse($XML_drink_club_mate, $TXT_drink_club_mate, "drink:club-mate", "", icons)
 
 
 
@@ -241,8 +252,8 @@ icons = Hash.new()
 icons["retail"] = "./icon_afri-cola-retail_30x40_-12x-28.png\t30,40\t-12,-28"
 icons["served"] = "./icon_afri-cola-served_32x40_-12x-28.png\t32,40\t-12,-28"
 icons["default"] = "./icon_afri-cola_24x24_-12x-12.png\t24,24\t-12,-12"
-$count_drink_afri_cola += parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "drink:afri-cola", "", icons)
-
+$count_drink_afri_cola, $date_drink_afri_cola = 
+    parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "drink:afri-cola", "", icons)
 
 ###########################
 # Generate HTML code
@@ -273,6 +284,12 @@ infile.each_line do |line|
 	    result = $count_drink_club_mate
 	when "count_drink_afri_cola"
 	    result = $count_drink_afri_cola
+	when "date_club_mate"
+	    result = $date_club_mate
+	when "date_drink_club_mate"
+	    result = $date_drink_club_mate
+	when "date_drink_afri_cola"
+	    result = $date_drink_afri_cola
 	end
 
 	result.to_s
