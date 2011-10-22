@@ -197,28 +197,6 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
 end
 
 
-
-
-
-########################
-# tag: club-mate=yes
-########################
-
-
-# download
-#download($URL_club_mate, $XML_club_mate)
-
-#icons = Hash.new()
-#icons["default"] = "./icon_club-mate-obsolet_37x37_-12x-25.png\t37,37\t-12,-25"
-
-# Add Note about obsolete tag
-#description_extra = "<br/>HINWEIS:<br/>"
-#description_extra += "Der Tag club-mate=yes ist obsolet. Bitte benutze statt dessen drink:club-mate=*."
-
-#$count_club_mate, $date_club_mate = 
-#    parse($XML_club_mate, $TXT_club_mate, "club-mate", description_extra, icons)
-
-
 ###########################
 # tag: drink:club-mate=*
 ###########################
@@ -234,8 +212,6 @@ $count_drink_club_mate, $date_drink_club_mate =
     parse($XML_drink_club_mate, $TXT_drink_club_mate, "drink:club-mate", "", icons)
 
 
-
-
 ###########################
 # tag: drink:afri-cola=*
 ###########################
@@ -249,6 +225,8 @@ icons["served"] = "./icon_afri-cola-served_32x40_-12x-28.png\t32,40\t-12,-28"
 icons["default"] = "./icon_afri-cola_24x24_-12x-12.png\t24,24\t-12,-12"
 $count_drink_afri_cola, $date_drink_afri_cola = 
     parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "drink:afri-cola", "", icons)
+
+
 
 ###########################
 # Generate HTML code
@@ -273,14 +251,10 @@ infile.each_line do |line|
 	result = $&
 
 	case $1
-	when "count_club_mate"
-	    result = $count_club_mate
 	when "count_drink_club_mate"
 	    result = $count_drink_club_mate
 	when "count_drink_afri_cola"
 	    result = $count_drink_afri_cola
-	when "date_club_mate"
-	    result = $date_club_mate
 	when "date_drink_club_mate"
 	    result = $date_drink_club_mate
 	when "date_drink_afri_cola"
