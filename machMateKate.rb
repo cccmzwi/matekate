@@ -50,19 +50,13 @@ else
 end
 
 # URLs, file names and counters
-$URL_club_mate="http://www.informationfreeway.org/api/0.6/node[club-mate=yes]"
-$XML_club_mate="club-mate.xml"
-$TXT_club_mate="club-mate.txt"
-$count_club_mate = 0;
-$date_club_mate = "";
-
-$URL_drink_club_mate="http://www.informationfreeway.org/api/0.6/node[drink:club-mate=*]"
+$URL_drink_club_mate="http://www.overpass-api.de/api/xapi?node[drink:club-mate=*]"
 $XML_drink_club_mate="drink_club-mate.xml"
 $TXT_drink_club_mate="drink_club-mate.txt"
 $count_drink_club_mate = 0;
 $date_drink_club_mate = "";
 
-$URL_drink_afri_cola="http://www.informationfreeway.org/api/0.6/node[drink:afri-cola=*]"
+$URL_drink_afri_cola="http://www.overpass-api.de/api/xapi?node[drink:afri-cola=*]"
 $XML_drink_afri_cola="drink_afri-cola.xml"
 $TXT_drink_afri_cola="drink_afri-cola.txt"
 $count_drink_afri_cola = 0;
@@ -194,8 +188,9 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     file.close()
 
     # Read date
-    date = doc.root.attributes["xapi:planetDate"]
-    date = date.slice(6,2) + "." + date.slice(4,2) + "." + date.slice(0,4)
+    #date = doc.root.attributes["xapi:planetDate"]
+    #date = date.slice(6,2) + "." + date.slice(4,2) + "." + date.slice(0,4)
+    date = "20.10.2011"
 
     # Return number of found nodes.
     return count, date
@@ -211,17 +206,17 @@ end
 
 
 # download
-download($URL_club_mate, $XML_club_mate)
+#download($URL_club_mate, $XML_club_mate)
 
-icons = Hash.new()
-icons["default"] = "./icon_club-mate-obsolet_37x37_-12x-25.png\t37,37\t-12,-25"
+#icons = Hash.new()
+#icons["default"] = "./icon_club-mate-obsolet_37x37_-12x-25.png\t37,37\t-12,-25"
 
 # Add Note about obsolete tag
-description_extra = "<br/>HINWEIS:<br/>"
-description_extra += "Der Tag club-mate=yes ist obsolet. Bitte benutze statt dessen drink:club-mate=*."
+#description_extra = "<br/>HINWEIS:<br/>"
+#description_extra += "Der Tag club-mate=yes ist obsolet. Bitte benutze statt dessen drink:club-mate=*."
 
-$count_club_mate, $date_club_mate = 
-    parse($XML_club_mate, $TXT_club_mate, "club-mate", description_extra, icons)
+#$count_club_mate, $date_club_mate = 
+#    parse($XML_club_mate, $TXT_club_mate, "club-mate", description_extra, icons)
 
 
 ###########################
