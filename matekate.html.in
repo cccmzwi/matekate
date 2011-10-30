@@ -112,19 +112,6 @@
 	  });
 	map.addLayer(drink_afri_cola);
 
-	// Add overlay for club-mate=yes tagged locations
-	var club_mate = new OpenLayers.Layer.Text(
-		"<small>\
-		club-mate=yes \
-		(##count_club_mate##) \
-		##date_club_mate##\
-		</small>",
-	  {
-	    location:"./club-mate.txt",
-	    projection: map.displayProjection
-	  });
-	  map.addLayer(club_mate);
-
 	  // Configure controls
 	  map.addControl(new OpenLayers.Control.LayerSwitcher());
 	  map.removeControl(map.controls[1]);
