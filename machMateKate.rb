@@ -49,6 +49,9 @@ else
     $do_download = true
 end
 
+# Flag, show or hide drink_xyz elements
+$show_drink_no = false;
+
 # URLs, file names and counters
 $URL_drink_club_mate="http://www.overpass-api.de/api/xapi?node[drink:club-mate=*]"
 $XML_drink_club_mate="drink_club-mate.xml"
@@ -119,6 +122,7 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
 
     # We inspect each <node>
     doc.elements.each("osm/node") do | node |
+	showposition = true
 	# Collect needed data from the tags
 	name,street,housenumber,postcode,city = nil
 	icon = ""
@@ -126,6 +130,10 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     	node.elements.each("tag") do | tag |
     	    key=tag.attributes["k"]
     	    value=tag.attributes["v"]
+
+            if !$show_drink_no and key == drink_tag and value == "no"
+                showposition = false
+	    end
 
     	    case key
     	    when drink_tag
@@ -147,6 +155,9 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
     	        city=value
     	    end
     	end
+
+        # continue with next element when this one is hidden
+        next if !showposition
 
     	# Print position
     	file << node.attributes["lat"] + "\t"
@@ -207,6 +218,7 @@ download($URL_drink_club_mate, $XML_drink_club_mate)
 icons = Hash.new()
 icons["retail"] = "./icon_club-mate-retail_30x40_-12x-28.png\t30,40\t-12,-28"
 icons["served"] = "./icon_club-mate-served_32x40_-12x-28.png\t32,40\t-12,-28"
+icons["no"] = "./icon_club-mate-no_24x24_-12x-12.png\t24,24\t-12,-12"
 icons["default"] = "./icon_club-mate_24x24_-12x-12.png\t24,24\t-12,-12"
 $count_drink_club_mate, $date_drink_club_mate = 
     parse($XML_drink_club_mate, $TXT_drink_club_mate, "drink:club-mate", "", icons)
@@ -222,6 +234,7 @@ download($URL_drink_afri_cola, $XML_drink_afri_cola)
 icons = Hash.new()
 icons["retail"] = "./icon_afri-cola-retail_30x40_-12x-28.png\t30,40\t-12,-28"
 icons["served"] = "./icon_afri-cola-served_32x40_-12x-28.png\t32,40\t-12,-28"
+icons["no"] = "./icon_afri-cola-no_24x24_-12x-12.png\t24,24\t-12,-12"
 icons["default"] = "./icon_afri-cola_24x24_-12x-12.png\t24,24\t-12,-12"
 $count_drink_afri_cola, $date_drink_afri_cola = 
     parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "drink:afri-cola", "", icons)
