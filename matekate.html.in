@@ -81,8 +81,7 @@
 
 	// Add base layers to map
 	var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
-	var layerOr = new OpenLayers.Layer.OSM.Osmarender("Osmarender");
-	map.addLayers([layerMapnik,layerOr]);
+	map.addLayers([layerMapnik]);
 
 	// Add overlay for drink:club-mate=* tagged locations
 	var drink_club_mate = new OpenLayers.Layer.Text(
