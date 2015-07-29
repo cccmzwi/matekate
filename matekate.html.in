@@ -56,10 +56,10 @@
       }
     </style>
 
-    <script src="http://www.openlayers.org/api/OpenLayers.js">
+    <script src="//www.openlayers.org/api/OpenLayers.js">
     </script>
 
-    <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js">
+    <script src="//www.openstreetmap.org/openlayers/OpenStreetMap.js">
     </script>
       
     <script type="text/javascript">
