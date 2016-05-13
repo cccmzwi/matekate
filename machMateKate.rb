@@ -49,21 +49,16 @@ else
     $do_download = true
 end
 
-# Flag, show or hide drink_xyz elements
+# Flag, show or hide drink:...=no elements
 $show_drink_no = false;
 
 # URLs, file names and counters
-$URL_drink_club_mate="http://www.overpass-api.de/api/xapi?node[drink:club-mate=*]"
-$XML_drink_club_mate="drink_club-mate.xml"
-$TXT_drink_club_mate="drink_club-mate.txt"
-$count_drink_club_mate = 0;
-$date_drink_club_mate = "";
-
-$URL_drink_afri_cola="http://www.overpass-api.de/api/xapi?node[drink:afri-cola=*]"
-$XML_drink_afri_cola="drink_afri-cola.xml"
-$TXT_drink_afri_cola="drink_afri-cola.txt"
-$count_drink_afri_cola = 0;
-$date_drink_afri_cola = "";
+$drinks = ['club-mate', 'afri-cola']
+$URL_template = "http://www.overpass-api.de/api/xapi?##OBJECT##[drink:##DRINK##=*]"
+$FILE_template = "drink_##DRINK##.##EXT##"
+$count = Hash.new();
+$date = Hash.new();
+$icons = Hash.new();
 
 # HTML file generation
 $html_infile = "matekate.html.in"
@@ -73,6 +68,23 @@ $html_outfile = "matekate.html"
 ################################
 # Helper functions
 ################################
+
+# Initializes some structures.
+# count, date and icon hashes are filled with initial content.
+# Icons for different drinks/drinkvalues must have same size for this to work fine.
+def init() 
+    $drinks.each do | drink |
+        $count[drink] = 0
+        $date[drink] = ""
+        iconsdrink = Hash.new();
+        iconsdrink["retail"] = "./icon_" + drink + "-retail_30x40_-12x-28.png\t30,40\t-12,-28"
+        iconsdrink["served"] = "./icon_" + drink + "-served_32x40_-12x-28.png\t32,40\t-12,-28"
+        iconsdrink["no"] = "./icon_" + drink + "-no_24x24_-12x-12.png\t24,24\t-12,-12"
+        iconsdrink["default"] = "./icon_" + drink + "_24x24_-12x-12.png\t24,24\t-12,-12"
+	$icons[drink] = iconsdrink;
+
+    end
+end
 
 # Download data (max. 3 tries)
 #
@@ -208,37 +220,25 @@ def parse(infile, outfile, drink_tag, description_extra, icons)
 end
 
 
-###########################
-# tag: drink:club-mate=*
-###########################
+#################################
+# Initialize data
+#################################
 
-# download
-download($URL_drink_club_mate, $XML_drink_club_mate)
+init();
 
-icons = Hash.new()
-icons["retail"] = "./icon_club-mate-retail_30x40_-12x-28.png\t30,40\t-12,-28"
-icons["served"] = "./icon_club-mate-served_32x40_-12x-28.png\t32,40\t-12,-28"
-icons["no"] = "./icon_club-mate-no_24x24_-12x-12.png\t24,24\t-12,-12"
-icons["default"] = "./icon_club-mate_24x24_-12x-12.png\t24,24\t-12,-12"
-$count_drink_club_mate, $date_drink_club_mate = 
-    parse($XML_drink_club_mate, $TXT_drink_club_mate, "drink:club-mate", "", icons)
+#################################
+# tag: drink:[name of drink]=*
+#################################
 
+$drinks.each do | drink |
+    download($URL_template.gsub("##DRINK##", drink).gsub("##OBJECT##", "node"), $FILE_template.gsub("##DRINK##", drink).gsub("##EXT##", "xml"))
+    countdrink, datedrink = 
+        parse($FILE_template.gsub("##DRINK##", drink).gsub("##EXT##", "xml"),
+              $FILE_template.gsub("##DRINK##", drink).gsub("##EXT##", "txt"), "drink:" + drink, "", $icons[drink])
+    $count[drink] = countdrink;
+    $date[drink] = datedrink;
 
-###########################
-# tag: drink:afri-cola=*
-###########################
-
-# Download data
-download($URL_drink_afri_cola, $XML_drink_afri_cola)
-
-icons = Hash.new()
-icons["retail"] = "./icon_afri-cola-retail_30x40_-12x-28.png\t30,40\t-12,-28"
-icons["served"] = "./icon_afri-cola-served_32x40_-12x-28.png\t32,40\t-12,-28"
-icons["no"] = "./icon_afri-cola-no_24x24_-12x-12.png\t24,24\t-12,-12"
-icons["default"] = "./icon_afri-cola_24x24_-12x-12.png\t24,24\t-12,-12"
-$count_drink_afri_cola, $date_drink_afri_cola = 
-    parse($XML_drink_afri_cola, $TXT_drink_afri_cola, "drink:afri-cola", "", icons)
-
+end
 
 
 ###########################
@@ -247,11 +247,10 @@ $count_drink_afri_cola, $date_drink_afri_cola =
 #
 # We read a html file and substitute the following patterns:
 #
-# ##count_drink_afri_cola## => number of afri-cola nodes
-#
-# ##count_drink_club_mate## => number of club nodes (new tag)
-#
-# ##count_club_mate## => number of club nodes (old tag)
+# ##count_drink_afri-cola## => number of afri-cola nodes
+# ##count_drink_club-mate## => number of club nodes
+# ##date_drink_afri-cola##  => date of afri-cola nodes
+# ##date_drink_club-mate##  => date of club nodes
 
 # Open files
 infile = File.new($html_infile)
@@ -264,14 +263,14 @@ infile.each_line do |line|
 	result = $&
 
 	case $1
-	when "count_drink_club_mate"
-	    result = $count_drink_club_mate
-	when "count_drink_afri_cola"
-	    result = $count_drink_afri_cola
-	when "date_drink_club_mate"
-	    result = $date_drink_club_mate
-	when "date_drink_afri_cola"
-	    result = $date_drink_afri_cola
+	when "count_drink_club-mate"
+	    result = $count["club-mate"]
+	when "count_drink_afri-cola"
+	    result = $count["afri-cola"]
+	when "date_drink_club-mate"
+	    result = $date["club-mate"]
+	when "date_drink_afri-cola"
+	    result = $date["afri-cola"]
 	end
 
 	result.to_s

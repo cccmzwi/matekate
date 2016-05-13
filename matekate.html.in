@@ -86,9 +86,9 @@
 	// Add overlay for drink:club-mate=* tagged locations
 	var drink_club_mate = new OpenLayers.Layer.Text(
 		"<small>\
-		drink:club-mate=* \
-		(##count_drink_club_mate##) \
-		##date_drink_club_mate##\
+		drink:club-mate \
+		(##count_drink_club-mate##) \
+		##date_drink_club-mate##\
 		</small>",
 	      {
 		location:"./drink_club-mate.txt",
@@ -99,9 +99,9 @@
 	// Add overlay for drink:afri-cola=* tagged locations
 	var drink_afri_cola = new OpenLayers.Layer.Text(
 		"<small>\
-		drink:afri-cola=* \
-		(##count_drink_afri_cola##) \
-		##date_drink_afri_cola##\
+		drink:afri-cola \
+		(##count_drink_afri-cola##) \
+		##date_drink_afri-cola##\
 		</small>",
 	  {
 	    location:"./drink_afri-cola.txt",
